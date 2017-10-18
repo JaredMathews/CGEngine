@@ -5,7 +5,7 @@ class Scene
 {
 public:
 	Scene(Engine* engine) : m_engine(engine) {};
-	virtual ~Scene() = 0;
+	~Scene() {};
 
 	virtual bool Initialize() = 0;
 	virtual void Update() = 0;

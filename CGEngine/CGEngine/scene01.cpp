@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "scene01.h"
 #include "glm\vec3.hpp"
+#include "renderer.h"
 
 Scene01::~Scene01()
 {
@@ -55,7 +56,8 @@ enum vboID
 
 bool Scene01::Initialize()
 {
-	GLuint vboHandles[3];
+	GLuint program = m_engine->Get<Renderer>()->CreateShaderProgram("..\\Resources\\Shaders\\basic.vert", "..\\Resources\\Shaders\\basic.frag");
+
 	glGenBuffers(3, vboHandles);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vboHandles[POSITION]);
@@ -64,7 +66,6 @@ bool Scene01::Initialize()
 	glBindBuffer(GL_ARRAY_BUFFER, vboHandles[COLOR]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(colorData), colorData, GL_STATIC_DRAW);
 
-	GLuint vaoHandle;
 	glGenVertexArrays(1, &vaoHandle);
 	glBindVertexArray(vaoHandle);
 
@@ -86,6 +87,16 @@ bool Scene01::Initialize()
 
 void Scene01::Render()
 {
+	m_engine->Update();
+		
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// render code
+	glBindVertexArray(vaoHandle);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glBindVertexArray(0);
+
+	glfwSwapBuffers(m_engine->Get<Renderer>()->m_window);
 }
 
 void Scene01::Update()

@@ -16,6 +16,9 @@
     <Filter Include="Resource Files\Resource">
       <UniqueIdentifier>{2ecc683a-9f6f-4a75-9b06-6ff7584dca6a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{36666f62-5e35-4464-8877-0ba51008d129}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -48,8 +51,11 @@
     <ClInclude Include="scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="scene02.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
     <ClInclude Include="scene01.h">
-      <Filter>Header Files</Filter>
+      <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -78,7 +84,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="scene01.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="scene02.cpp">
+      <Filter>Scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,6 +95,9 @@
       <Filter>Resource Files\Resource</Filter>
     </None>
     <None Include="..\Resources\Shaders\basic.vert">
+      <Filter>Resource Files\Resource</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\transform.vert">
       <Filter>Resource Files\Resource</Filter>
     </None>
   </ItemGroup>

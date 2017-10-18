@@ -11,5 +11,9 @@ public:
 	void Render();
 	void Update();
 	void Shutdown();
+
+private:
+	GLuint vboHandles[3];
+	GLuint vaoHandle;
 };
 
