@@ -57,6 +57,9 @@
     <ClInclude Include="scene01.h">
       <Filter>Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="scene03.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -87,6 +90,9 @@
       <Filter>Scenes</Filter>
     </ClCompile>
     <ClCompile Include="scene02.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="scene03.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
   </ItemGroup>

@@ -4,6 +4,7 @@
 #include "glm\vec3.hpp"
 #include "scene01.h"
 #include "scene02.h"
+#include "scene03.h"
 
 int main()
 {
@@ -14,7 +15,7 @@ int main()
 		exit(EXIT_FAILURE);
 	}
 
-	std::shared_ptr<Scene> scene(new Scene02(engine.get()));
+	std::shared_ptr<Scene> scene(new Scene03(engine.get()));
 	if (!scene->Initialize())
 	{
 		scene->Shutdown();

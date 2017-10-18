@@ -1,11 +1,11 @@
 #pragma once
 #include "scene.h"
-
-class Scene01 : public Scene
+class Scene03 :
+	public Scene
 {
 public:
-	Scene01(Engine* engine) : Scene(engine) {};
-	~Scene01();
+	Scene03(Engine* engine) : Scene(engine) {};
+	~Scene03();
 
 	bool Initialize();
 	void Render();
