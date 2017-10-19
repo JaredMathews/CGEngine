@@ -106,5 +106,8 @@
     <None Include="..\Resources\Shaders\transform.vert">
       <Filter>Resource Files\Resource</Filter>
     </None>
+    <None Include="..\Resources\Shaders\light.vert">
+      <Filter>Resource Files\Resource</Filter>
+    </None>
   </ItemGroup>
 </Project>

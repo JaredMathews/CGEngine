@@ -96,29 +96,32 @@ bool Scene03::Initialize()
 {
 	GLuint program = m_engine->Get<Renderer>()->CreateShaderProgram("..\\Resources\\Shaders\\basic.vert", "..\\Resources\\Shaders\\basic.frag");
 
-	glGenBuffers(3, m_vboHandles);
+	glGenBuffers(1, m_vboHandles);
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_vboHandles[POSITION]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(positionData2), positionData2, GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, m_vboHandles[COLOR]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(colorData2), colorData2, GL_STATIC_DRAW);
+	/*glBindBuffer(GL_ARRAY_BUFFER, m_vboHandles[COLOR]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(colorData2), colorData2, GL_STATIC_DRAW);*/
 
 	glGenVertexArrays(1, &m_vaoHandle);
 	glBindVertexArray(m_vaoHandle);
 
 	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
+	//glEnableVertexAttribArray(1);
 
-	glBindVertexBuffer(0, m_vboHandles[POSITION], 0, sizeof(glm::vec3));
+	//glBindVertexBuffer(0, m_vboHandles[POSITION], 0, sizeof(glm::vec3));
+	glBindVertexBuffer(0, *m_vboHandles, 0, sizeof(glm::vec3) * 2);
+	glBindVertexBuffer(1, *m_vboHandles, sizeof(glm::vec3), sizeof(glm::vec3) * 2);
+
 
 	glVertexAttribFormat(0, 3, GL_FLOAT, GL_FALSE, 0);
 	glVertexAttribBinding(0, 0);
 
-	glBindVertexBuffer(1, m_vboHandles[COLOR], 0, sizeof(glm::vec3));
+	/*glBindVertexBuffer(1, m_vboHandles[COLOR], 0, sizeof(glm::vec3));
 
 	glVertexAttribFormat(1, 3, GL_FLOAT, GL_FALSE, 0);
-	glVertexAttribBinding(1, 1);
+	glVertexAttribBinding(1, 1);*/
 
 	return true;
 }
@@ -131,7 +134,7 @@ void Scene03::Render()
 
 	// render code
 	glBindVertexArray(m_vaoHandle);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 
 	glfwSwapBuffers(m_engine->Get<Renderer>()->m_window);
