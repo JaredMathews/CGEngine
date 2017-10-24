@@ -16,7 +16,13 @@ out vec3 outVertexColor;
 
 void main()
 {
+	vec3 tNormal = mxNormal * vertexNormal;
+	vec4 mvPosition = (mxModelView) * vec4(vertexPosition, 1.0);
+	vec3 positionToLight = normalize(vec3(lightPosition - vec3(mvPosition)));
+	float diffuseIntensity = max(dot(positionToLight, tNormal), 0.0);
+	vec3 diffuse = lightColor * diffuseMaterial * diffuseIntensity;
+
 	vec3 ambient = ambientMaterial;
-	outVertexColor = ambient;
+	outVertexColor = ambient + diffuse;
 	gl_Position = mxMVP * vec4(vertexPosition, 1.0);
 }
