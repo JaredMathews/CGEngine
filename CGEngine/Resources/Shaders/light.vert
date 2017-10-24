@@ -2,6 +2,7 @@
 
 layout (location=0) in vec3 vertexPosition;
 layout (location=1) in vec3 vertexNormal;
+
 uniform vec3 ambientMaterial;
 uniform vec3 diffuseMaterial;
 uniform vec3 specularMaterial;
@@ -17,5 +18,5 @@ void main()
 {
 	vec3 ambient = ambientMaterial;
 	outVertexColor = ambient;
-	gl_Position = vec4(vertexPosition, 1.0);
+	gl_Position = mxMVP * vec4(vertexPosition, 1.0);
 }
