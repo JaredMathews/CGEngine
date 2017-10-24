@@ -22,7 +22,18 @@ void main()
 	float diffuseIntensity = max(dot(positionToLight, tNormal), 0.0);
 	vec3 diffuse = lightColor * diffuseMaterial * diffuseIntensity;
 
+	vec3 specular = vec3(0.0);
+	if (diffuseIntensity > 0.0)
+	{
+		vec3 positionToView = normalize(-mvPosition.xyz);
+		vec3 reflectLightVector = reflect(-positionToLight, tNormal);
+		float specularIntensity = max(dot(reflectLightVector, positionToView), 0.0);
+		specularIntensity = pow(specularIntensity, 1.0);
+		specular = lightColor * specularMaterial * specularIntensity;
+	}
+
+
 	vec3 ambient = ambientMaterial;
-	outVertexColor = ambient + diffuse;
+	outVertexColor = ambient + diffuse + specular;
 	gl_Position = mxMVP * vec4(vertexPosition, 1.0);
 }
