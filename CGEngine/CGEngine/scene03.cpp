@@ -5,6 +5,8 @@
 #include "renderer.h"
 #include "timer.h"
 
+#define PHONG
+
 Scene03::~Scene03()
 {
 }
@@ -96,7 +98,11 @@ enum vboID
 
 bool Scene03::Initialize()
 {
-	m_cube.shaderProgram = m_engine->Get<Renderer>()->CreateShaderProgram("..\\Resources\\Shaders\\light.vert", "..\\Resources\\Shaders\\basic.frag");
+	#ifdef PHONG
+		m_cube.shaderProgram = m_engine->Get<Renderer>()->CreateShaderProgram("..\\Resources\\Shaders\\phong.vert", "..\\Resources\\Shaders\\phong.frag");
+	#else
+		m_cube.shaderProgram = m_engine->Get<Renderer>()->CreateShaderProgram("..\\Resources\\Shaders\\light.vert", "..\\Resources\\Shaders\\basic.frag");
+	#endif
 
 	m_cube.mxModelViewUniform = glGetUniformLocation(m_cube.shaderProgram, "mxModelView");
 	m_cube.mxNormalUniform = glGetUniformLocation(m_cube.shaderProgram, "mxNormal");
