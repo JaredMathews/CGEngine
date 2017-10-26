@@ -156,7 +156,7 @@ void Scene03::Update()
 {
 	m_rotation = m_rotation + m_engine->Get<Timer>()->FrameTime();
 	glm::mat4 translate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-	glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), m_rotation, glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), m_rotation, glm::vec3(1.0f, 0.0f, 0.0f));
 	glm::mat4 mxModel = translate * rotate;
 
 	glm::vec3 ambientMaterial = glm::vec3(0.2f, 0.2f, 0.2f);

@@ -23,7 +23,7 @@ void main()
 		vec3 positionToView = normalize(-outFragmentPosition.xyz);
 		vec3 reflectLightVector = reflect(-positionToLight, outFragmentNormal);
 		float specularIntensity = max(dot(reflectLightVector, positionToView), 0.0);
-		specularIntensity = pow(specularIntensity, 100.0);
+		specularIntensity = pow(specularIntensity, 1.0);
 		specular = lightColor * specularMaterial * specularIntensity;
 	}
 
