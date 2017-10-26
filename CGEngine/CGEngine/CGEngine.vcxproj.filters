@@ -60,6 +60,12 @@
     <ClInclude Include="scene03.h">
       <Filter>Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="scene04.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -94,6 +100,12 @@
     </ClCompile>
     <ClCompile Include="scene03.cpp">
       <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="scene04.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="shader.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
