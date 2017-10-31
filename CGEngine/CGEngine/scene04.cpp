@@ -106,7 +106,6 @@ bool Scene04::Initialize()
 	GLint height = 0;
 	GLint bpp = 0;
 	const unsigned char* data = Image::LoadBMP("..\\Resources\\Textures\\crate.bmp", width, height, bpp);
-	std::cout << data << std::endl;
 
 	if (data == nullptr)
 		std::cout << "data is null" << std::endl;
@@ -142,19 +141,15 @@ bool Scene04::Initialize()
 
 	glBindTexture(GL_TEXTURE_2D, m_texture);
 
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	if (bpp == 24)
 	{
-		glTexStorage2D(GL_TEXTURE_2D, 0, GL_BGR, width, height);
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_BGR, GL_UNSIGNED_BYTE, data);
-		//glTexImage2D(GL_TEXTURE_2D, 0, GL_BGR, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, (GLvoid*)data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*)data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else if (bpp == 32)
 	{
-		glTexStorage2D(GL_TEXTURE_2D, 0, GL_BGRA, width, height);
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_BGRA, GL_UNSIGNED_BYTE, data);
-		//glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, (GLvoid*)data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, (GLvoid*)data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	
