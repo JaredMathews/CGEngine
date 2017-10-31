@@ -4,8 +4,7 @@
 #include "glm\gtc\matrix_transform.hpp"
 #include "renderer.h"
 #include "timer.h"
-
-#define PHONG
+#include "image.h"
 
 Scene04::~Scene04()
 {
@@ -13,47 +12,47 @@ Scene04::~Scene04()
 
 float positionData3[] =
 {
-	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+	0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
+	0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+	0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 
-	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-	0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-	0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-	0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
+	0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 0.0f,
+	0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
+	0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
 
-	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 
-	0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-	0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-	0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-	0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-	0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-	0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+	0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+	0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+	0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+	0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+	0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+	0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 
-	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-	0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-	0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-	0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+	0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
+	0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+	0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
 
-	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-	0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-	0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-	0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+	0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
+	0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+	0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 };
 
 float colorData3[] =
@@ -98,22 +97,19 @@ enum vboID
 
 bool Scene04::Initialize()
 {
-#ifdef PHONG
-	m_cube.shaderProgram = m_engine->Get<Renderer>()->CreateShaderProgram("..\\Resources\\Shaders\\phong.vert", "..\\Resources\\Shaders\\phong.frag");
-#else
-	m_cube.shaderProgram = m_engine->Get<Renderer>()->CreateShaderProgram("..\\Resources\\Shaders\\light.vert", "..\\Resources\\Shaders\\basic.frag");
-#endif
+	m_shaderProgram.CompileShader("..\\Resources\\Shaders\\texture_phong.vert.shader", GL_VERTEX_SHADER);
+	m_shaderProgram.CompileShader("..\\Resources\\Shaders\\texture_phong.frag.shader", GL_FRAGMENT_SHADER);
+	m_shaderProgram.Link();
+	m_shaderProgram.Use();
 
-	m_cube.mxModelViewUniform = glGetUniformLocation(m_cube.shaderProgram, "mxModelView");
-	m_cube.mxNormalUniform = glGetUniformLocation(m_cube.shaderProgram, "mxNormal");
-	m_cube.mxMVPUniform = glGetUniformLocation(m_cube.shaderProgram, "mxMVP");
+	GLint width = 0;
+	GLint height = 0;
+	GLint bpp = 0;
+	const unsigned char* data = Image::LoadBMP("..\\Resources\\Textures\\crate.bmp", width, height, bpp);
+	std::cout << data << std::endl;
 
-	m_cube.ambientMaterialUniform = glGetUniformLocation(m_cube.shaderProgram, "ambientMaterial");
-	m_cube.diffuseMaterialUniform = glGetUniformLocation(m_cube.shaderProgram, "diffuseMaterial");
-	m_cube.specularMaterialUniform = glGetUniformLocation(m_cube.shaderProgram, "specularMaterial");
-
-	m_light.positionUniform = glGetUniformLocation(m_cube.shaderProgram, "lightPosition");
-	m_light.colorUniform = glGetUniformLocation(m_cube.shaderProgram, "lightColor");
+	if (data == nullptr)
+		std::cout << "data is null" << std::endl;
 
 	glGenBuffers(1, m_vboHandles);
 
@@ -125,9 +121,11 @@ bool Scene04::Initialize()
 
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
 
-	glBindVertexBuffer(0, *m_vboHandles, 0, sizeof(glm::vec3) * 2);
-	glBindVertexBuffer(1, *m_vboHandles, sizeof(glm::vec3), sizeof(glm::vec3) * 2);
+	glBindVertexBuffer(0, m_vboHandles[POSITION], 0, sizeof(glm::vec3) * 2 + sizeof(float) * 2);
+	glBindVertexBuffer(1, m_vboHandles[POSITION], sizeof(glm::vec3), sizeof(glm::vec3) * 2 + sizeof(float) * 2);
+	glBindVertexBuffer(2, m_vboHandles[POSITION], sizeof(glm::vec3) * 2, sizeof(glm::vec3) * 2 + sizeof(float) * 2);
 
 	glVertexAttribFormat(0, 3, GL_FLOAT, GL_FALSE, 0);
 	glVertexAttribBinding(0, 0);
@@ -135,13 +133,38 @@ bool Scene04::Initialize()
 	glVertexAttribFormat(1, 3, GL_FLOAT, GL_FALSE, 0);
 	glVertexAttribBinding(1, 1);
 
+	glVertexAttribFormat(2, 2, GL_FLOAT, GL_FALSE, 0);
+	glVertexAttribBinding(2, 2);
+
+	glActiveTexture(GL_TEXTURE0);
+
+	glGenTextures(1, &m_texture);
+
+	glBindTexture(GL_TEXTURE_2D, m_texture);
+
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	if (bpp == 24)
+	{
+		glTexStorage2D(GL_TEXTURE_2D, 0, GL_BGR, width, height);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_BGR, GL_UNSIGNED_BYTE, data);
+		//glTexImage2D(GL_TEXTURE_2D, 0, GL_BGR, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, (GLvoid*)data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else if (bpp == 32)
+	{
+		glTexStorage2D(GL_TEXTURE_2D, 0, GL_BGRA, width, height);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_BGRA, GL_UNSIGNED_BYTE, data);
+		//glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, (GLvoid*)data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	
+	delete data;
+
 	return true;
 }
 
 void Scene04::Render()
 {
-	//m_engine->Update();
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// render code
@@ -160,34 +183,38 @@ void Scene04::Update()
 	glm::mat4 mxModel = translate * rotate;
 
 	glm::vec3 ambientMaterial = glm::vec3(0.2f, 0.2f, 0.2f);
-	glUniform3fv(m_cube.ambientMaterialUniform, 1, &ambientMaterial[0]);
+	m_shaderProgram.SetUniform("ambientMaterial", ambientMaterial);
 
 	glm::mat4 mxView = glm::lookAt(glm::vec3(0.0f, 1.0f, 1.5f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	glm::mat4 mxProjection = glm::perspective(90.0f, (float)m_engine->Get<Renderer>()->m_width / (float)m_engine->Get<Renderer>()->m_height, 0.01f, 10000.0f);
 
 	glm::mat4 mxModelView = mxView * mxModel;
-	glUniformMatrix4fv(m_cube.mxModelViewUniform, 1, GL_FALSE, &mxModelView[0][0]);
+	m_shaderProgram.SetUniform("mxModelView", mxModelView);
 
 	glm::mat4 mxMVP = mxProjection * mxView * mxModel;
-	glUniformMatrix4fv(m_cube.mxMVPUniform, 1, GL_FALSE, &mxMVP[0][0]);
+	m_shaderProgram.SetUniform("mxMVP", mxMVP);
 
 	glm::mat3 mxNormal = glm::mat3(mxModelView);
 	mxNormal = glm::inverse(mxNormal);
 	mxNormal = glm::transpose(mxNormal);
-	glUniformMatrix3fv(m_cube.mxNormalUniform, 1, GL_FALSE, &mxNormal[0][0]);
+	m_shaderProgram.SetUniform("mxNormal", mxNormal);
 
 	glm::vec3 lightPosition = mxView * glm::vec4(2.0f, 10.0f, 10.0f, 1.0f);
-	glUniform4fv(m_light.positionUniform, 1, &lightPosition[0]);
+	m_shaderProgram.SetUniform("lightPosition", lightPosition);
 
 	glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
-	glUniform3fv(m_light.colorUniform, 1, &lightColor[0]);
+	m_shaderProgram.SetUniform("lightColor", lightColor);
 
 	glm::vec3 diffuseMaterial = glm::vec3(0.0f, 0.0f, 1.0f);
-	glUniform3fv(m_cube.diffuseMaterialUniform, 1, &diffuseMaterial[0]);
+	m_shaderProgram.SetUniform("diffuseMaterial", diffuseMaterial);
 
 	glm::vec3 specularMaterial = glm::vec3(1.0f, 0.0f, 0.0f);
-	glUniform3fv(m_cube.specularMaterialUniform, 1, &specularMaterial[0]);
+	m_shaderProgram.SetUniform("specularMaterial", specularMaterial);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_texture);
+	m_shaderProgram.SetUniform("textureSampler", m_texture);
 }
 
 void Scene04::Shutdown()

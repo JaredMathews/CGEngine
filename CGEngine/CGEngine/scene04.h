@@ -40,6 +40,8 @@ private:
 	GLuint m_vboHandles[3];
 	GLuint m_vaoHandle;
 
+	GLuint m_texture;
+
 	object m_cube;
 	light m_light;
 

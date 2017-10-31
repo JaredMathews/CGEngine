@@ -160,6 +160,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\Middleware\glad\include\glad\glad.h" />
     <ClInclude Include="engine.h" />
+    <ClInclude Include="image.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="scene.h" />
@@ -180,6 +181,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="image.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="input.cpp" />
@@ -204,6 +206,8 @@
     <None Include="..\Resources\Shaders\light.vert" />
     <None Include="..\Resources\Shaders\phong.frag" />
     <None Include="..\Resources\Shaders\phong.vert" />
+    <None Include="..\Resources\Shaders\texture_phong.frag.shader" />
+    <None Include="..\Resources\Shaders\texture_phong.vert.shader" />
     <None Include="..\Resources\Shaders\transform.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
