@@ -6,6 +6,8 @@
 #include "timer.h"
 #include "image.h"
 
+//#define SPECULAR
+
 Scene04::~Scene04()
 {
 }
@@ -98,7 +100,12 @@ enum vboID
 bool Scene04::Initialize()
 {
 	m_shaderProgram.CompileShader("..\\Resources\\Shaders\\texture_phong.vert.shader", GL_VERTEX_SHADER);
-	m_shaderProgram.CompileShader("..\\Resources\\Shaders\\texture_phong.frag.shader", GL_FRAGMENT_SHADER);
+	#ifdef SPECULAR
+	m_shaderProgram.CompileShader("..\\Resources\\Shaders\\texture_phong_specular.frag.shader", GL_FRAGMENT_SHADER);
+	#else
+	m_shaderProgram.CompileShader("..\\Resources\\Shaders\\multi_tex_phong.frag.shader", GL_FRAGMENT_SHADER);
+	#endif
+
 	m_shaderProgram.Link();
 	m_shaderProgram.Use();
 
@@ -106,6 +113,15 @@ bool Scene04::Initialize()
 	GLint height = 0;
 	GLint bpp = 0;
 	const unsigned char* data = Image::LoadBMP("..\\Resources\\Textures\\crate.bmp", width, height, bpp);
+
+	GLint width2 = 0;
+	GLint height2 = 0;
+	GLint bpp2 = 0;
+	#ifdef SPECULAR
+	const unsigned char* data2 = Image::LoadBMP("..\\Resources\\Textures\\crate_specular.bmp", width2, height2, bpp2);
+	#else
+	const unsigned char* data2 = Image::LoadBMP("..\\Resources\\Textures\\grass.bmp", width2, height2, bpp2);
+	#endif
 
 	if (data == nullptr)
 		std::cout << "data is null" << std::endl;
@@ -135,11 +151,11 @@ bool Scene04::Initialize()
 	glVertexAttribFormat(2, 2, GL_FLOAT, GL_FALSE, 0);
 	glVertexAttribBinding(2, 2);
 
+	glGenTextures(2, m_texture);
+
 	glActiveTexture(GL_TEXTURE0);
 
-	glGenTextures(1, &m_texture);
-
-	glBindTexture(GL_TEXTURE_2D, m_texture);
+	glBindTexture(GL_TEXTURE_2D, m_texture[0]);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	if (bpp == 24)
@@ -150,6 +166,22 @@ bool Scene04::Initialize()
 	else if (bpp == 32)
 	{
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, (GLvoid*)data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+
+	glActiveTexture(GL_TEXTURE1);
+
+	glBindTexture(GL_TEXTURE_2D, m_texture[1]);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	if (bpp2 == 24)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width2, height2, 0, GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*)data2);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else if (bpp2 == 32)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA, width2, height2, 0, GL_BGRA, GL_UNSIGNED_BYTE, (GLvoid*)data2);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	
@@ -201,15 +233,19 @@ void Scene04::Update()
 	glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
 	m_shaderProgram.SetUniform("lightColor", lightColor);
 
-	glm::vec3 diffuseMaterial = glm::vec3(0.0f, 0.0f, 1.0f);
+	glm::vec3 diffuseMaterial = glm::vec3(1.0f, 1.0f, 1.0f);
 	m_shaderProgram.SetUniform("diffuseMaterial", diffuseMaterial);
 
-	glm::vec3 specularMaterial = glm::vec3(1.0f, 0.0f, 0.0f);
+	glm::vec3 specularMaterial = glm::vec3(1.0f, 1.0f, 1.0f);
 	m_shaderProgram.SetUniform("specularMaterial", specularMaterial);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, m_texture);
-	m_shaderProgram.SetUniform("textureSampler", m_texture);
+	glBindTexture(GL_TEXTURE_2D, m_texture[0]);
+	m_shaderProgram.SetUniform("textureSampler", m_texture[0]);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, m_texture[1]);
+	m_shaderProgram.SetUniform("textureSampler2", m_texture[1]);
 }
 
 void Scene04::Shutdown()

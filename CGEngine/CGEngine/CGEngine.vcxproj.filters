@@ -139,5 +139,11 @@
     <None Include="..\Resources\Shaders\texture_phong.vert.shader">
       <Filter>Resource Files\Resource</Filter>
     </None>
+    <None Include="..\Resources\Shaders\multi_tex_phong.frag.shader">
+      <Filter>Resource Files\Resource</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\texture_phong_specular.frag.shader">
+      <Filter>Resource Files\Resource</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -204,10 +204,12 @@
     <None Include="..\Resources\Shaders\basic.frag" />
     <None Include="..\Resources\Shaders\basic.vert" />
     <None Include="..\Resources\Shaders\light.vert" />
+    <None Include="..\Resources\Shaders\multi_tex_phong.frag.shader" />
     <None Include="..\Resources\Shaders\phong.frag" />
     <None Include="..\Resources\Shaders\phong.vert" />
     <None Include="..\Resources\Shaders\texture_phong.frag.shader" />
     <None Include="..\Resources\Shaders\texture_phong.vert.shader" />
+    <None Include="..\Resources\Shaders\texture_phong_specular.frag.shader" />
     <None Include="..\Resources\Shaders\transform.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
