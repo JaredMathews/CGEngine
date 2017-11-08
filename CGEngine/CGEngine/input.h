@@ -66,10 +66,6 @@ public:
 	float GetAnalogRelative(const std::string name);
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-public:
-	static float s_scrollX;
-	static float s_scrollY;
-
 private:
 	std::map<std::string, ButtonInfo> m_buttons;
 	std::map<std::string, AnalogInfo> m_analogs;
