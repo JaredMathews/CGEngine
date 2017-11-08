@@ -22,6 +22,7 @@ Input::~Input()
 
 bool Input::Initialize()
 {
+	glfwSetScrollCallback(m_engine->Get<Renderer>()->m_window, scroll_callback);
 	return true;
 }
 
@@ -106,6 +107,14 @@ void Input::Update()
 			x = (float)xd;
 			y = (float)yd;
 		}
+		else if (info.type == eAnalogType::MOUSE_Z)
+		{
+			x = s_scrollX;
+			y = s_scrollY;
+
+			s_scrollX = 0.0f;
+			s_scrollY = 0.0f;
+		}
 				
 		switch (info.type)
 		{
@@ -121,6 +130,10 @@ void Input::Update()
 			break;
 		case eAnalogType::MOUSE_Y:
 			info.valueRelative = y - info.valueAbsolute;
+			info.valueAbsolute = y;
+			break;
+		case eAnalogType::MOUSE_Z:
+			info.valueRelative = (info.valueAbsolute == FLT_MAX) ? 0.0f : y;
 			info.valueAbsolute = y;
 			break;
 		}
@@ -186,4 +199,10 @@ float Input::GetAnalogRelative(const std::string name)
 	}
 
 	return value;
+}
+
+void Input::scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
+{
+	s_scrollX = (float)xoffset;
+	s_scrollY = (float)yoffset;
 }

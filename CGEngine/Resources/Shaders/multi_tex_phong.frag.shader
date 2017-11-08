@@ -35,5 +35,5 @@ void main()
 	vec4 texColor = mix(texColor1, texColor2, 0.5);
 
 	vec4 ambient = vec4(ambientMaterial, 1.0);
-	outFragmentColor = (texColor * (ambient + diffuse)) + specular;
+	outFragmentColor = ((ambient + diffuse) * texColor) + specular;
 }

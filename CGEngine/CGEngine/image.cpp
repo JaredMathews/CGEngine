@@ -26,6 +26,14 @@ const unsigned char * Image::LoadBMP(const std::string & filename, int & width, 
 
 	file.read((char*) data, size);
 
+	unsigned char tmpRGB = 0;
+	for (unsigned long i = 0; i < size-2; i += 3)
+	{
+		tmpRGB = data[i];
+		data[i] = data[i + 2];
+		data[i + 2] = tmpRGB;
+	}
+
 	file.close();
 	
 	return data;

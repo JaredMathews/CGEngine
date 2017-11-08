@@ -35,6 +35,8 @@ bool Engine::Initialize()
 		}
 	}
 
+	this->Get<Input>()->Initialize();
+
 	return true;
 }
 

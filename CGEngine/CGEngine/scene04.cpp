@@ -6,7 +6,7 @@
 #include "timer.h"
 #include "image.h"
 
-//#define SPECULAR
+#define SPECULAR
 
 Scene04::~Scene04()
 {
@@ -165,7 +165,7 @@ bool Scene04::Initialize()
 	}
 	else if (bpp == 32)
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, (GLvoid*)data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*)data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 
@@ -236,7 +236,7 @@ void Scene04::Update()
 	glm::vec3 diffuseMaterial = glm::vec3(1.0f, 1.0f, 1.0f);
 	m_shaderProgram.SetUniform("diffuseMaterial", diffuseMaterial);
 
-	glm::vec3 specularMaterial = glm::vec3(1.0f, 1.0f, 1.0f);
+	glm::vec3 specularMaterial = glm::vec3(0.75f, 0.75f, 0.75f);
 	m_shaderProgram.SetUniform("specularMaterial", specularMaterial);
 
 	glActiveTexture(GL_TEXTURE0);
