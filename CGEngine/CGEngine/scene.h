@@ -13,7 +13,7 @@ public:
 	virtual void Render() = 0;
 	virtual void Shutdown() = 0;
 
-protected:
+public:
 	Engine* m_engine;
 	Shader m_shaderProgram;
 };

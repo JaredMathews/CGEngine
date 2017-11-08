@@ -1,6 +1,7 @@
 #pragma once
 #include "scene.h"
 #include "material.h"
+#include "camera.h"
 
 class Scene05 :
 	public Scene
@@ -50,5 +51,7 @@ private:
 	float m_rotation;
 
 	Material m_material;
+
+	Camera* m_camera;
 };
 

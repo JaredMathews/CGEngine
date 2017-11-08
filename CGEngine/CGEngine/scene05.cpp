@@ -97,28 +97,14 @@ enum vboID
 
 bool Scene05::Initialize()
 {
+	m_camera = new Camera("camera", this);
+	m_camera->Initialize(glm::vec3(0.0f, 1.0f, 1.5f), glm::vec3(0.0f, 0.0f, 0.0f), m_camera->GetData());
+
 	m_shaderProgram.CompileShader("..\\Resources\\Shaders\\texture_phong.vert.shader", GL_VERTEX_SHADER);
 	m_shaderProgram.CompileShader("..\\Resources\\Shaders\\texture_phong_specular.frag.shader", GL_FRAGMENT_SHADER);
 
 	m_shaderProgram.Link();
 	m_shaderProgram.Use();
-
-//	GLint width = 0;
-//	GLint height = 0;
-//	GLint bpp = 0;
-//	const unsigned char* data = Image::LoadBMP("..\\Resources\\Textures\\crate.bmp", width, height, bpp);
-//
-//	GLint width2 = 0;
-//	GLint height2 = 0;
-//	GLint bpp2 = 0;
-//#ifdef SPECULAR
-//	const unsigned char* data2 = Image::LoadBMP("..\\Resources\\Textures\\crate_specular.bmp", width2, height2, bpp2);
-//#else
-//	const unsigned char* data2 = Image::LoadBMP("..\\Resources\\Textures\\grass.bmp", width2, height2, bpp2);
-//#endif
-
-	//if (data == nullptr)
-	//	std::cout << "data is null" << std::endl;
 
 	glGenBuffers(1, m_vboHandles);
 
@@ -171,9 +157,12 @@ void Scene05::Update()
 	glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), m_rotation, glm::vec3(1.0f, 0.0f, 0.0f));
 	glm::mat4 mxModel = translate * rotate;
 
-	glm::mat4 mxView = glm::lookAt(glm::vec3(0.0f, 1.0f, 1.5f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	//glm::mat4 mxView = glm::lookAt(glm::vec3(0.0f, 1.0f, 1.5f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
-	glm::mat4 mxProjection = glm::perspective(90.0f, (float)m_engine->Get<Renderer>()->m_width / (float)m_engine->Get<Renderer>()->m_height, 0.01f, 10000.0f);
+	//glm::mat4 mxProjection = glm::perspective(90.0f, (float)m_engine->Get<Renderer>()->m_width / (float)m_engine->Get<Renderer>()->m_height, 0.01f, 10000.0f);
+	m_camera->Update();
+	glm::mat4 mxView = m_camera->GetView();
+	glm::mat4 mxProjection = m_camera->GetProjection();
 
 	glm::mat4 mxModelView = mxView * mxModel;
 	m_shaderProgram.SetUniform("mxModelView", mxModelView);
