@@ -5,6 +5,7 @@
 #include "renderer.h"
 #include "timer.h"
 #include "image.h"
+#include "light.h"
 
 Scene05::~Scene05()
 {
@@ -135,6 +136,14 @@ bool Scene05::Initialize()
 	m_material.LoadTexture2D("..\\Resources\\Textures\\crate.bmp", GL_TEXTURE0);
 	m_material.LoadTexture2D("..\\Resources\\Textures\\crate_specular.bmp", GL_TEXTURE1);
 
+	Light* light = new Light("light", this);
+
+	light->ambient = glm::vec3(0.3f, 0.3f, 0.3f);
+	light->diffuse = glm::vec3(1.0f);
+	light->specular = glm::vec3(1.0f);
+	light->m_transform.m_position = glm::vec3(0.0f, 1.5f, 2.0f);
+	AddObject(light);
+
 	return true;
 }
 
@@ -152,14 +161,19 @@ void Scene05::Render()
 
 void Scene05::Update()
 {
+	auto objects = GetObjects<Object>();
+	for (auto object : objects)
+	{
+		object->Update();
+	}
+
+	Light* light = GetObject<Light>("light");
+
 	m_rotation = m_rotation + m_engine->Get<Timer>()->FrameTime();
 	glm::mat4 translate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 	glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), m_rotation, glm::vec3(1.0f, 0.0f, 0.0f));
 	glm::mat4 mxModel = translate * rotate;
 
-	//glm::mat4 mxView = glm::lookAt(glm::vec3(0.0f, 1.0f, 1.5f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-
-	//glm::mat4 mxProjection = glm::perspective(90.0f, (float)m_engine->Get<Renderer>()->m_width / (float)m_engine->Get<Renderer>()->m_height, 0.01f, 10000.0f);
 	m_camera->Update();
 	glm::mat4 mxView = m_camera->GetView();
 	glm::mat4 mxProjection = m_camera->GetProjection();
@@ -175,11 +189,18 @@ void Scene05::Update()
 	mxNormal = glm::transpose(mxNormal);
 	m_shaderProgram.SetUniform("mxNormal", mxNormal);
 
-	glm::vec3 lightPosition = mxView * glm::vec4(2.0f, 10.0f, 10.0f, 1.0f);
-	m_shaderProgram.SetUniform("lightPosition", lightPosition);
+	//glm::vec3 lightPosition = mxView * glm::vec4(2.0f, 10.0f, 10.0f, 1.0f);
+	//m_shaderProgram.SetUniform("lightPosition", lightPosition);
+
+	glm::vec3 lightPosition = mxView * glm::vec4(light->m_transform.m_position, 1.0f);
+	m_shaderProgram.SetUniform("light.position", lightPosition);
 
 	glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
-	m_shaderProgram.SetUniform("lightColor", lightColor);
+	m_shaderProgram.SetUniform("light.color", lightColor);
+
+	m_shaderProgram.SetUniform("light.ambient", light->ambient);
+	m_shaderProgram.SetUniform("light.diffuse", light->diffuse);
+	m_shaderProgram.SetUniform("light.specular", light->specular);
 
 	m_shaderProgram.SetUniform("material.ambient", m_material.m_ambient);
 	m_shaderProgram.SetUniform("material.diffuse", m_material.m_diffuse);
