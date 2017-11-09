@@ -19,6 +19,9 @@
     <Filter Include="Scenes">
       <UniqueIdentifier>{36666f62-5e35-4464-8877-0ba51008d129}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{e0f23ed4-37b8-4f18-b3a9-b650509f3cde}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -84,14 +87,14 @@
     <ClInclude Include="object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="camera.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="renderable.h">
+      <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="light.h">
-      <Filter>Header Files</Filter>
+      <Filter>Objects</Filter>
     </ClInclude>
-    <ClInclude Include="renderable.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="camera.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -150,13 +153,13 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="camera.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="light.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="renderable.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

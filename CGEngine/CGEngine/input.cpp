@@ -25,6 +25,7 @@ Input::~Input()
 
 bool Input::Initialize()
 {
+	glfwSetKeyCallback(m_engine->Get<Renderer>()->m_window, key_callback);
 	glfwSetScrollCallback(m_engine->Get<Renderer>()->m_window, scroll_callback);
 	return true;
 }
