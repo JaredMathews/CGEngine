@@ -24,6 +24,15 @@ struct Light
 
 uniform Light light;
 
+struct Fog
+{
+	float distanceMin;
+	float distanceMax;
+	vec3 color;
+};
+
+uniform Fog fog;
+
 layout(binding = 0) uniform sampler2D textureSampler;
 layout(binding = 1) uniform sampler2D textureSampler2;
 
@@ -54,5 +63,11 @@ void main()
 	specular = specular * vec4(light.specular, 1.0);
 	ambient = ambient * vec4(light.ambient, 1.0);
 
-	outFragmentColor = ((ambient + diffuse) * texColor) + (specular * specularColor);
+	vec4 phong = ((ambient + diffuse) * texColor) + (specular * specularColor);
+
+	float distance = abs(outFragmentPosition.z);
+	float fogIntensity = clamp((distance - fog.distanceMin) / (fog.distanceMax - fog.distanceMin), 0.0, 1.0);
+
+	vec4 color = mix(phong, vec4(fog.color, 1.0), fogIntensity);
+	outFragmentColor = color;
 }
