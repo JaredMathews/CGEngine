@@ -10,11 +10,6 @@ public:
 	Renderable(const std::string& name, Scene* scene) : Object(name, scene) {}
 	~Renderable();
 
-	void Update();
-	void Render();
-
-protected:
-	Shader m_shaderProgram;
-	Material m_material;
+	virtual void Render() = 0;
 };
 

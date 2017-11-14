@@ -44,7 +44,7 @@ public:
 		{
 			if (dynamic_cast<T*>(obj) != nullptr)
 			{
-				tempVec.push_back(obj);
+				tempVec.push_back(dynamic_cast<T*> (obj));
 			}
 		}
 		return tempVec;

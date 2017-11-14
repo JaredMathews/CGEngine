@@ -4,11 +4,3 @@
 Renderable::~Renderable()
 {
 }
-
-void Renderable::Update()
-{
-}
-
-void Renderable::Render()
-{
-}

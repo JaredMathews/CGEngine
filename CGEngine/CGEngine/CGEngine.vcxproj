@@ -89,7 +89,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\Middleware\glad\include;$(SolutionDir)\..\Middleware\glfw-3.2.1.bin.WIN32\include;$(SolutionDir)\..\Middleware\glm-master;$(SolutionDir)\..\Middleware\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\Middleware\glad\include;$(SolutionDir)\..\Middleware\glfw-3.2.1.bin.WIN32\include;$(SolutionDir)\..\Middleware\glm-master;$(SolutionDir)\..\Middleware\stb;$(SolutionDir)\..\Middleware\helpers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -105,7 +105,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\Middleware\glad\include;$(SolutionDir)\..\Middleware\glfw-3.2.1.bin.WIN32\include;$(SolutionDir)\..\Middleware\glm-master;$(SolutionDir)\..\Middleware\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\Middleware\glad\include;$(SolutionDir)\..\Middleware\glfw-3.2.1.bin.WIN32\include;$(SolutionDir)\..\Middleware\glm-master;$(SolutionDir)\..\Middleware\stb;$(SolutionDir)\..\Middleware\helpers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -123,7 +123,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\Middleware\glad\include;$(SolutionDir)\..\Middleware\glfw-3.2.1.bin.WIN32\include;$(SolutionDir)\..\Middleware\glm-master;$(SolutionDir)\..\Middleware\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\Middleware\glad\include;$(SolutionDir)\..\Middleware\glfw-3.2.1.bin.WIN32\include;$(SolutionDir)\..\Middleware\glm-master;$(SolutionDir)\..\Middleware\stb;$(SolutionDir)\..\Middleware\helpers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -143,7 +143,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\Middleware\glad\include;$(SolutionDir)\..\Middleware\glfw-3.2.1.bin.WIN32\include;$(SolutionDir)\..\Middleware\glm-master;$(SolutionDir)\..\Middleware\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\Middleware\glad\include;$(SolutionDir)\..\Middleware\glfw-3.2.1.bin.WIN32\include;$(SolutionDir)\..\Middleware\glm-master;$(SolutionDir)\..\Middleware\stb;$(SolutionDir)\..\Middleware\helpers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -167,6 +167,7 @@
     <ClInclude Include="light.h" />
     <ClInclude Include="material.h" />
     <ClInclude Include="mesh.h" />
+    <ClInclude Include="model.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="renderable.h" />
     <ClInclude Include="renderer.h" />
@@ -182,7 +183,6 @@
     <ClInclude Include="system.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="timer.h" />
-    <ClInclude Include="tiny_obj_loader.h" />
     <ClInclude Include="transform.h" />
   </ItemGroup>
   <ItemGroup>
@@ -200,6 +200,7 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="material.cpp" />
     <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="model.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="renderable.cpp" />
     <ClCompile Include="renderer.cpp" />

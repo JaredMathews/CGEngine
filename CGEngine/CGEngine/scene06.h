@@ -2,6 +2,7 @@
 #include "scene.h"
 #include "material.h"
 #include "camera.h"
+#include "mesh.h"
 
 class Scene06 :
 	public Scene
