@@ -20,6 +20,9 @@ struct Light
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
+	vec3 direction;
+	float exponent;
+	float cutoff;
 };
 
 uniform Light light;
@@ -40,39 +43,41 @@ layout(location = 0) out vec4 outFragmentColor;
 
 void phong(vec3 position, vec3 normal, out vec3 ambientDiffuse, out vec3 specular)
 {
-	vec3 positionToLight;
-	if (light.position.w == 0)
+	vec3 directionToLight = normalize(vec3(light.position) - position);
+	vec3 spotDirection = normalize(light.direction);
+	float angle = acos(dot(-directionToLight, spotDirection));
+
+	float diffuseIntensity = max(dot(directionToLight, outFragmentNormal), 0.0);
+	//vec3 diffuse = vec3(material.diffuse * diffuseIntensity);
+
+	vec3 ambient = material.ambient * light.ambient;
+
+	if (angle < light.cutoff)
 	{
-		positionToLight = normalize(vec3(light.position));
+		float spotFactor = pow(dot(-directionToLight, spotDirection), light.exponent);
+		vec3 diffuse = vec3(light.diffuse * material.diffuse * diffuseIntensity) * spotFactor;
+
+		//diffuse = diffuse * light.diffuse;
+		//ambient = ambient * light.ambient;
+
+		ambientDiffuse = ambient + diffuse;
+
+		if (diffuseIntensity > 0.0)
+		{
+			vec3 positionToView = normalize(-outFragmentPosition.xyz);
+			vec3 reflectLightVector = reflect(-directionToLight, outFragmentNormal);
+			float specularIntensity = max(dot(reflectLightVector, positionToView), 0.0);
+			specularIntensity = pow(specularIntensity, material.shininess);
+
+			specular = vec3(light.specular * material.specular * specularIntensity) * spotFactor;
+		}
 	}
 	else
 	{
-		positionToLight = normalize(vec3(vec3(light.position) - vec3(outFragmentPosition)));
+		ambientDiffuse = ambient;
+		specular = vec3(0.0f, 0.0f, 0.0f);
 	}
 
-	// ambient/diffuse lighting calculations that were in main
-
-	float diffuseIntensity = max(dot(positionToLight, outFragmentNormal), 0.0);
-	vec3 diffuse = vec3(material.diffuse * diffuseIntensity);
-
-	vec3 ambient = material.ambient;
-
-	diffuse = diffuse * light.diffuse;
-	ambient = ambient * light.ambient;
-
-	ambientDiffuse = ambient + diffuse;
-
-	// specular calculations that were in main
-
-	if (diffuseIntensity > 0.0)
-	{
-		vec3 positionToView = normalize(-outFragmentPosition.xyz);
-		vec3 reflectLightVector = reflect(-positionToLight, outFragmentNormal);
-		float specularIntensity = max(dot(reflectLightVector, positionToView), 0.0);
-		specularIntensity = pow(specularIntensity, material.shininess);
-
-		specular = light.specular * material.specular * specularIntensity;
-	}
 }
 
 void main()

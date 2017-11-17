@@ -20,6 +20,13 @@ bool Scene07::Initialize()
 {
 	m_engine->Get<Input>()->AddButton("mode", Input::eButtonType::KEYBOARD, GLFW_KEY_SPACE);
 
+	// camera
+	Camera* camera = new Camera("camera", this);
+	Camera::Data data;
+	data.type = Camera::eType::ORBIT;
+	camera->Initialize(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), data);
+	AddObject(camera);
+
 	// light
 	Light* light = new Light("light", this);
 	light->ambient = glm::vec3(0.2f);
@@ -33,14 +40,18 @@ bool Scene07::Initialize()
 	model->m_transform.m_position = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	model->m_shader.CompileShader("..\\Resources\\Shaders\\texture_phong.vert.shader", GL_VERTEX_SHADER);
+#ifdef SPOTLIGHT
+	model->m_shader.CompileShader("..\\Resources\\Shaders\\phong_spotlight.frag.shader", GL_FRAGMENT_SHADER);
+#else
 	model->m_shader.CompileShader("..\\Resources\\Shaders\\phong_directional.frag.shader", GL_FRAGMENT_SHADER);
+#endif
 	model->m_shader.Link();
 	model->m_shader.Use();
 	model->m_shader.PrintActiveAttribs();
 	model->m_shader.PrintActiveUniforms();
 
-	model->m_material.m_ambient = glm::vec3(0.2f, 0.2f, 0.2f);
-	model->m_material.m_diffuse = glm::vec3(0.75f, 0.75f, 0.75f);
+	model->m_material.m_ambient = glm::vec3(0.2f, 0.2f, 0.8f);
+	model->m_material.m_diffuse = glm::vec3(0.75f, 0.4f, 0.85f);
 	model->m_material.m_specular = glm::vec3(1.0f, 1.0f, 1.0f);
 	model->m_material.m_shininess = 0.4f * 128.0f;
 
@@ -52,6 +63,11 @@ bool Scene07::Initialize()
 	model->m_shader.SetUniform("light.ambient", light->ambient);
 	model->m_shader.SetUniform("light.diffuse", light->diffuse);
 	model->m_shader.SetUniform("light.specular", light->specular);
+
+#ifdef SPOTLIGHT
+	model->m_shader.SetUniform("light.cutoff", glm::radians(45.0f));
+	model->m_shader.SetUniform("light.exponent", 30.0f);
+#endif
 
 	model->m_mesh.Load("..\\Resources\\ObjFiles\\suzanne.obj");
 	model->m_mesh.BindVertexAttrib(0, Mesh::eVertexType::POSITION);
@@ -65,14 +81,18 @@ bool Scene07::Initialize()
 	model->m_transform.m_position = glm::vec3(0.0f, -1.0f, 0.0f);
 
 	model->m_shader.CompileShader("..\\Resources\\Shaders\\texture_phong.vert.shader", GL_VERTEX_SHADER);
+#ifdef SPOTLIGHT
+	model->m_shader.CompileShader("..\\Resources\\Shaders\\phong_spotlight.frag.shader", GL_FRAGMENT_SHADER);
+#else
 	model->m_shader.CompileShader("..\\Resources\\Shaders\\phong_directional.frag.shader", GL_FRAGMENT_SHADER);
+#endif
 	model->m_shader.Link();
 	model->m_shader.Use();
 	model->m_shader.PrintActiveAttribs();
 	model->m_shader.PrintActiveUniforms();
 
-	model->m_material.m_ambient = glm::vec3(0.2f, 0.2f, 0.2f);
-	model->m_material.m_diffuse = glm::vec3(0.75f, 0.75f, 0.75f);
+	model->m_material.m_ambient = glm::vec3(0.2f, 0.0f, 0.0f);
+	model->m_material.m_diffuse = glm::vec3(1.0f, 0.75f, 0.75f);
 	model->m_material.m_specular = glm::vec3(1.0f, 1.0f, 1.0f);
 	model->m_material.m_shininess = 0.4f * 128.0f;
 
@@ -85,19 +105,17 @@ bool Scene07::Initialize()
 	model->m_shader.SetUniform("light.diffuse", light->diffuse);
 	model->m_shader.SetUniform("light.specular", light->specular);
 
+#ifdef SPOTLIGHT
+	model->m_shader.SetUniform("light.cutoff", glm::radians(45.0f));
+	model->m_shader.SetUniform("light.exponent", 30.0f);
+#endif
+
 	model->m_mesh.Load("..\\Resources\\ObjFiles\\plane.obj");
 	model->m_mesh.BindVertexAttrib(0, Mesh::eVertexType::POSITION);
 	model->m_mesh.BindVertexAttrib(1, Mesh::eVertexType::NORMAL);
 	model->m_mesh.BindVertexAttrib(2, Mesh::eVertexType::TEXCOORD);
 
 	AddObject(model);
-
-	// camera
-	Camera* camera = new Camera("camera", this);
-	Camera::Data data;
-	data.type = Camera::eType::ORBIT;
-	camera->Initialize(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), data);
-	AddObject(camera);
 
 	m_rotation = 0.0f;
 
@@ -132,7 +150,7 @@ void Scene07::Update()
 
 	m_rotation = m_rotation + 1.0f * dt;
 	glm::quat rotation = glm::angleAxis(m_rotation, glm::vec3(0.0f, 1.0f, 0.0f));
-	light->m_transform.m_position = rotation * glm::vec3(0.0f, 0.0f, 2.0f);
+	light->m_transform.m_position = rotation * glm::vec3(0.0f, 3.0f, 1.5f);
 	float w = (m_pointLightMode) ? 1.0f : 0.0f;
 	glm::vec4 position = camera->GetView() * glm::vec4(light->m_transform.m_position, w);
 
@@ -141,6 +159,12 @@ void Scene07::Update()
 	{
 		model->m_shader.Use();
 		model->m_shader.SetUniform("light.position", position);
+
+#ifdef SPOTLIGHT
+		glm::mat3 viewDirectionMatrix = glm::mat3(camera->GetView());
+		glm::vec3 direction = viewDirectionMatrix * glm::vec4(glm::vec3(0.0f, -1.0f, 0.0f), 0.0f);
+		model->m_shader.SetUniform("light.direction", direction);
+#endif
 	}
 
 	auto objects = GetObjects<Object>();

@@ -223,5 +223,8 @@
     <None Include="..\Resources\Shaders\phong_directional.frag.shader">
       <Filter>Resource Files\Resource</Filter>
     </None>
+    <None Include="..\Resources\Shaders\phong_spotlight.frag.shader">
+      <Filter>Resource Files\Resource</Filter>
+    </None>
   </ItemGroup>
 </Project>
