@@ -8,7 +8,7 @@ class Light :
 public:
 	Light(const std::string& name, Scene* scene) : Renderable(name, scene)
 	{
-		m_mesh.Load("..\\Resources\\Meshes\\cube.obj");
+		m_mesh.Load("..\\Resources\\ObjFiles\\cube.obj");
 		m_mesh.BindVertexAttrib(0, Mesh::eVertexType::POSITION);
 		m_transform.m_scale = glm::vec3(0.2f);
 

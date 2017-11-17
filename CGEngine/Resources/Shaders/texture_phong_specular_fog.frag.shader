@@ -63,7 +63,7 @@ void main()
 	specular = specular * vec4(light.specular, 1.0);
 	ambient = ambient * vec4(light.ambient, 1.0);
 
-	vec4 phong = ((ambient + diffuse) * texColor) + (specular * specularColor);
+	vec4 phong = ((ambient + diffuse)/* * texColor*/) + (specular /** specularColor*/);
 
 	float distance = abs(outFragmentPosition.z);
 	float fogIntensity = clamp((distance - fog.distanceMin) / (fog.distanceMax - fog.distanceMin), 0.0, 1.0);
