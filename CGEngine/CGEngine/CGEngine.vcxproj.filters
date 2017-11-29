@@ -108,6 +108,9 @@
     <ClInclude Include="scene07.h">
       <Filter>Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="scene08.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -184,6 +187,9 @@
     </ClCompile>
     <ClCompile Include="scene07.cpp">
       <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="scene08.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
