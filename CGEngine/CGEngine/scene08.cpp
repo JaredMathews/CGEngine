@@ -2,7 +2,9 @@
 #include "scene08.h"
 #include "glm\vec3.hpp"
 #include "glm\gtc\matrix_transform.hpp"
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtc/random.hpp>
+#include <glm/gtx/color_space.hpp>
 #include "renderer.h"
 #include "timer.h"
 #include "image.h"
@@ -34,12 +36,16 @@ bool Scene08::Initialize()
 	{
 		Light* light = new Light("light", this);
 		light->ambient = glm::vec3(0.2f);
-		light->diffuse = glm::vec3(1.0f, 1.0f, 1.0f);
 		light->specular = glm::vec3(1.0f, 1.0f, 1.0f);
 		glm::vec3 position = glm::sphericalRand(4.0f);
 		light->m_transform.m_position = position;
+		glm::vec3 color = glm::rgbColor(glm::vec3(glm::linearRand(0.0f, 360.0f), 1.0f, 1.0f));
+		light->diffuse = color;
 		AddObject(light);
 	}
+
+	auto lights = GetObjects<Light>();
+
 
 	// model
 	auto model = new Model("model", this);
@@ -67,14 +73,21 @@ bool Scene08::Initialize()
 	model->m_shader.SetUniform("material.specular", model->m_material.m_specular);
 	model->m_shader.SetUniform("material.shininess", model->m_material.m_shininess);
 
-	model->m_shader.SetUniform("light.ambient", light->ambient);
-	model->m_shader.SetUniform("light.diffuse", light->diffuse);
-	model->m_shader.SetUniform("light.specular", light->specular);
+	for (size_t i = 0; i < lights.size(); i++)
+	{
+		char uniformName[32];
+
+		sprintf_s(uniformName, "lights[%d].diffuse", i);
+		model->m_shader.SetUniform(uniformName, lights[i]->diffuse);
+
+		sprintf_s(uniformName, "lights[%d].specular", i);
+		model->m_shader.SetUniform(uniformName, lights[i]->specular);
 
 #ifdef SPOTLIGHT
-	model->m_shader.SetUniform("light.cutoff", glm::radians(45.0f));
-	model->m_shader.SetUniform("light.exponent", 30.0f);
+		model->m_shader.SetUniform("lights[%d].cutoff", glm::radians(45.0f));
+		model->m_shader.SetUniform("lights[%d].exponent", 30.0f);
 #endif
+	}
 
 	model->m_mesh.Load("..\\Resources\\ObjFiles\\suzanne.obj");
 	model->m_mesh.BindVertexAttrib(0, Mesh::eVertexType::POSITION);
@@ -108,14 +121,21 @@ bool Scene08::Initialize()
 	model->m_shader.SetUniform("material.specular", model->m_material.m_specular);
 	model->m_shader.SetUniform("material.shininess", model->m_material.m_shininess);
 
-	model->m_shader.SetUniform("light.ambient", light->ambient);
-	model->m_shader.SetUniform("light.diffuse", light->diffuse);
-	model->m_shader.SetUniform("light.specular", light->specular);
+	for (size_t i = 0; i < lights.size(); i++)
+	{
+		char uniformName[32];
+
+		sprintf_s(uniformName, "lights[%d].diffuse", i);
+		model->m_shader.SetUniform(uniformName, lights[i]->diffuse);
+
+		sprintf_s(uniformName, "lights[%d].specular", i);
+		model->m_shader.SetUniform(uniformName, lights[i]->specular);
 
 #ifdef SPOTLIGHT
-	model->m_shader.SetUniform("light.cutoff", glm::radians(45.0f));
-	model->m_shader.SetUniform("light.exponent", 30.0f);
+		model->m_shader.SetUniform("lights[%d].cutoff", glm::radians(45.0f));
+		model->m_shader.SetUniform("lights[%d].exponent", 30.0f);
 #endif
+	}
 
 	model->m_mesh.Load("..\\Resources\\ObjFiles\\plane.obj");
 	model->m_mesh.BindVertexAttrib(0, Mesh::eVertexType::POSITION);
@@ -146,32 +166,36 @@ void Scene08::Update()
 {
 	Model* model = GetObject<Model>("model");
 	Camera* camera = GetObject<Camera>("camera");
-	Light* light = GetObject<Light>("light");
 
 	if (m_engine->Get<Input>()->GetButton("mode") == Input::eButtonState::DOWN)
 	{
 		m_pointLightMode = !m_pointLightMode;
 	}
 
-	float dt = m_engine->Get<Timer>()->FrameTime();
-
-	m_rotation = m_rotation + 1.0f * dt;
-	glm::quat rotation = glm::angleAxis(m_rotation, glm::vec3(0.0f, 1.0f, 0.0f));
-	light->m_transform.m_position = rotation * glm::vec3(0.0f, 3.0f, 1.5f);
-	float w = (m_pointLightMode) ? 1.0f : 0.0f;
-	glm::vec4 position = camera->GetView() * glm::vec4(light->m_transform.m_position, w);
-
-	auto models = GetObjects<Model>();
-	for (auto model : models)
+	auto lights = GetObjects<Light>();
+	for (size_t i = 0; i < lights.size(); i++)
 	{
-		model->m_shader.Use();
-		model->m_shader.SetUniform("light.position", position);
+		// calculate light position position = view * light[i]
+		float dt = m_engine->Get<Timer>()->FrameTime();
+
+		m_rotation = m_rotation + 1.0f * dt;
+		glm::quat rotation = glm::angleAxis(m_rotation, glm::vec3(0.0f, 1.0f, 0.0f));
+		lights[i]->m_transform.m_position = rotation * glm::vec3(0.0f, 3.0f, 1.5f);
+		float w = (m_pointLightMode) ? 1.0f : 0.0f;
+		glm::vec4 position = camera->GetView() * glm::vec4(lights[i]->m_transform.m_position, w);
+
+		auto models = GetObjects<Model>();
+		for (auto model : models)
+		{
+			model->m_shader.Use();
+			model->m_shader.SetUniform("lights[%d].position", position);
 
 #ifdef SPOTLIGHT
-		glm::mat3 viewDirectionMatrix = glm::mat3(camera->GetView());
-		glm::vec3 direction = viewDirectionMatrix * glm::vec4(glm::vec3(0.0f, -1.0f, 0.0f), 0.0f);
-		model->m_shader.SetUniform("light.direction", direction);
+			glm::mat3 viewDirectionMatrix = glm::mat3(camera->GetView());
+			glm::vec3 direction = viewDirectionMatrix * glm::vec4(glm::vec3(0.0f, -1.0f, 0.0f), 0.0f);
+			model->m_shader.SetUniform("lights[%d].direction", direction);
 #endif
+		}
 	}
 
 	auto objects = GetObjects<Object>();
