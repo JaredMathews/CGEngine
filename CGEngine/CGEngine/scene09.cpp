@@ -43,8 +43,8 @@ bool Scene09::Initialize()
 	model->m_transform.m_scale = glm::vec3(1.0f);
 	model->m_transform.m_position = glm::vec3(0.0f, 0.0f, 0.0f);
 
-	model->m_shader.CompileShader("..\\Resources\\Shaders\\phong.vert.shader", GL_VERTEX_SHADER);
-	model->m_shader.CompileShader("..\\Resources\\Shaders\\phong.frag.shader", GL_FRAGMENT_SHADER);
+	model->m_shader.CompileShader("..\\Resources\\Shaders\\phong.vert", GL_VERTEX_SHADER);
+	model->m_shader.CompileShader("..\\Resources\\Shaders\\phong.frag", GL_FRAGMENT_SHADER);
 	model->m_shader.Link();
 	model->m_shader.Use();
 	model->m_shader.PrintActiveAttribs();
@@ -75,20 +75,19 @@ bool Scene09::Initialize()
 
 	AddObject(model);
 
-	// model
 	model = new Model("cube", this);
 	model->m_transform.m_scale = glm::vec3(1.0f);
 	model->m_transform.m_position = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	model->m_shader.CompileShader("..\\Resources\\Shaders\\texture_phong.vert.shader", GL_VERTEX_SHADER);
-	model->m_shader.CompileShader("..\\Resources\\Shaders\\phong.frag.shader", GL_FRAGMENT_SHADER);
+	model->m_shader.CompileShader("..\\Resources\\Shaders\\texture_phong.frag.shader", GL_FRAGMENT_SHADER);
 	model->m_shader.Link();
 	model->m_shader.Use();
 	model->m_shader.PrintActiveAttribs();
 	model->m_shader.PrintActiveUniforms();
 
-	model->m_material.m_ambient = glm::vec3(0.2f, 0.2f, 0.2f);
-	model->m_material.m_diffuse = glm::vec3(0.75f, 0.75f, 0.75f);
+	model->m_material.m_ambient = glm::vec3(1.0f, 1.0f, 1.0f);
+	model->m_material.m_diffuse = glm::vec3(1.0f, 1.0f, 1.0f);
 	model->m_material.m_specular = glm::vec3(1.0f, 1.0f, 1.0f);
 	model->m_material.m_shininess = 0.4f * 128.0f;
 
@@ -106,12 +105,8 @@ bool Scene09::Initialize()
 	model->m_mesh.BindVertexAttrib(1, Mesh::eVertexType::NORMAL);
 	model->m_mesh.BindVertexAttrib(2, Mesh::eVertexType::TEXCOORD);
 
-	model->m_cameraID = "camera";
-
 	GLuint texture = Material::CreateTexture(512, 512);
 	model->m_material.AddTexture(texture, GL_TEXTURE0);
-
-	AddObject(model);
 
 	m_rotation = 0.0f;
 
@@ -132,11 +127,15 @@ bool Scene09::Initialize()
 	GLenum result = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	assert(result == GL_FRAMEBUFFER_COMPLETE);
 
+	AddObject(model);
+
 	return true;
 }
 
 void Scene09::Render()
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	glViewport(0, 0, 512, 512);
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 
@@ -159,13 +158,13 @@ void Scene09::Render()
 	renderable = GetObject<Renderable>("light");
 	renderable->Render();
 
-	/*std::vector<Renderable*> renderables = GetObjects<Renderable>();
+	std::vector<Renderable*> renderables = GetObjects<Renderable>();
 	for (auto renderable : renderables)
 	{
 		renderable->Render();
 	}
 
-	glfwSwapBuffers(m_engine->Get<Renderer>()->m_window);*/
+	glfwSwapBuffers(m_engine->Get<Renderer>()->m_window);
 }
 
 void Scene09::Update()
