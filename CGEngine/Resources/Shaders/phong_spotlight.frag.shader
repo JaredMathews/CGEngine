@@ -87,7 +87,7 @@ void main()
 	{
 		vec3 diffuse;
 		vec3 specular;
-		phong(i, outFragmentPosition, outFragmentNormal, diffuse, specular);
+		phong(i, vec3(outFragmentPosition), outFragmentNormal, diffuse, specular);
 		color += (diffuse + specular);
 	}
 

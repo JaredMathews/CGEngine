@@ -46,7 +46,6 @@ bool Scene08::Initialize()
 
 	auto lights = GetObjects<Light>();
 
-
 	// model
 	auto model = new Model("model", this);
 	model->m_transform.m_scale = glm::vec3(1.0f);
@@ -84,8 +83,11 @@ bool Scene08::Initialize()
 		model->m_shader.SetUniform(uniformName, lights[i]->specular);
 
 #ifdef SPOTLIGHT
-		model->m_shader.SetUniform("lights[%d].cutoff", glm::radians(45.0f));
-		model->m_shader.SetUniform("lights[%d].exponent", 30.0f);
+		sprintf_s(uniformName, "lights[%d].cutoff", i);
+		model->m_shader.SetUniform(uniformName, glm::radians(45.0f));
+
+		sprintf_s(uniformName, "lights[%d].exponent", i);
+		model->m_shader.SetUniform(uniformName, 30.0f);
 #endif
 	}
 
@@ -132,8 +134,11 @@ bool Scene08::Initialize()
 		model->m_shader.SetUniform(uniformName, lights[i]->specular);
 
 #ifdef SPOTLIGHT
-		model->m_shader.SetUniform("lights[%d].cutoff", glm::radians(45.0f));
-		model->m_shader.SetUniform("lights[%d].exponent", 30.0f);
+		sprintf_s(uniformName, "lights[%d].cutoff", i);
+		model->m_shader.SetUniform(uniformName, glm::radians(45.0f));
+
+		sprintf_s(uniformName, "lights[%d].exponent", i);
+		model->m_shader.SetUniform(uniformName, 30.0f);
 #endif
 	}
 
@@ -188,12 +193,17 @@ void Scene08::Update()
 		for (auto model : models)
 		{
 			model->m_shader.Use();
-			model->m_shader.SetUniform("lights[%d].position", position);
+
+			char uniformName[32];
+
+			sprintf_s(uniformName, "lights[%d].position", i);
+			model->m_shader.SetUniform(uniformName, position);
 
 #ifdef SPOTLIGHT
 			glm::mat3 viewDirectionMatrix = glm::mat3(camera->GetView());
 			glm::vec3 direction = viewDirectionMatrix * glm::vec4(glm::vec3(0.0f, -1.0f, 0.0f), 0.0f);
-			model->m_shader.SetUniform("lights[%d].direction", direction);
+			sprintf_s(uniformName, "lights[%d].direction", i);
+			model->m_shader.SetUniform(uniformName, direction);
 #endif
 		}
 	}
