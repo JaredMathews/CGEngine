@@ -54,5 +54,6 @@ private:
 	Material m_material;
 
 	Camera* m_camera;
+	GLuint m_framebuffer;
 };
 

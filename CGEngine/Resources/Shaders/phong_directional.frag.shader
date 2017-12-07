@@ -50,7 +50,7 @@ void phong(vec3 position, vec3 normal, out vec3 ambientDiffuse, out vec3 specula
 		positionToLight = normalize(vec3(vec3(light.position) - vec3(outFragmentPosition)));
 	}
 
-	// ambient/diffuse lighting calculations that were in main
+	// ambient/diffuse lighting calculations that were in main 
 
 	float diffuseIntensity = max(dot(positionToLight, outFragmentNormal), 0.0);
 	vec3 diffuse = vec3(material.diffuse * diffuseIntensity);
@@ -62,7 +62,7 @@ void phong(vec3 position, vec3 normal, out vec3 ambientDiffuse, out vec3 specula
 
 	ambientDiffuse = ambient + diffuse;
 
-	// specular calculations that were in main
+	// specular calculations that were in main 
 
 	if (diffuseIntensity > 0.0)
 	{
@@ -111,11 +111,11 @@ void phong(vec3 position, vec3 normal, out vec3 ambientDiffuse, out vec3 specula
 
 void main()
 {
-	vec3 ambientdiffuse;
+	vec3 ambientDiffuse;
 	vec3 specular;
-	phong(vec3(outFragmentPosition), outFragmentNormal, ambientdiffuse, specular);
+	phong(vec3(outFragmentPosition), outFragmentNormal, ambientDiffuse, specular);
 
-	outFragmentColor = vec4(ambientdiffuse + specular, 1.0);
+	outFragmentColor = vec4(ambientDiffuse + specular, 1.0);
 
 	/*vec3 color = material.ambient;
 	for (int i = 0; i < 5; i++)
