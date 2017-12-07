@@ -63,7 +63,7 @@ bool Scene10::Initialize()
 	model->m_mesh.BindVertexAttrib(0, Mesh::eVertexType::POSITION);
 	model->m_mesh.BindVertexAttrib(1, Mesh::eVertexType::NORMAL);
 
-	skyboxIndex = glGetSubroutineIndex(model->m_shader.GetHandle(), GL_VERTEX_SHADER, "skybox");
+	skyboxIndex = glGetSubroutineIndex(model->m_shader.GetHandle(), GL_VERTEX_SHADER, "reflection");
 	glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &skyboxIndex);
 
 	AddObject(model);

@@ -32,7 +32,7 @@ layout (location=0) out vec4 outFragmentColor;
 void phong(vec3 position, vec3 normal, out vec3 ambientDiffuse, out vec3 specular)
 {
 	vec3 positionToLight = normalize(vec3(light.position) - vec3(outFragmentPosition));
-	float diffuseIntensity = max(dot(positionToLight, outFragmentNormal), 0.0);
+	float diffuseIntensity = max(dot(positionToLight, normal), 0.0);
 	vec3 diffuse = light.diffuse * material.diffuse * diffuseIntensity;
 
 	vec3 ambient = material.ambient;
@@ -45,7 +45,7 @@ void phong(vec3 position, vec3 normal, out vec3 ambientDiffuse, out vec3 specula
 	if (diffuseIntensity > 0.0)
 	{
 		vec3 positionToView = normalize(-outFragmentPosition.xyz);
-		vec3 reflectLightVector = reflect(-positionToLight, outFragmentNormal);
+		vec3 reflectLightVector = reflect(-positionToLight, normal);
 		float specularIntensity = max(dot(reflectLightVector, positionToView), 0.0);
 		specularIntensity = pow(specularIntensity, material.shininess);
 		specular = light.specular * material.specular * specularIntensity;

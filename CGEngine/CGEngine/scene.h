@@ -28,9 +28,12 @@ public:
 	{
 		for each (auto obj in m_objects)
 		{
-			if (dynamic_cast<T*>(obj) != nullptr)
+			if (obj->m_name == name)
 			{
-				return dynamic_cast<T*>(obj);
+				if (dynamic_cast<T*>(obj) != nullptr)
+				{
+					return dynamic_cast<T*>(obj);
+				}
 			}
 		}
 		return nullptr;
