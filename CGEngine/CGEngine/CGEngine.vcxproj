@@ -181,6 +181,7 @@
     <ClInclude Include="scene07.h" />
     <ClInclude Include="scene08.h" />
     <ClInclude Include="scene09.h" />
+    <ClInclude Include="scene10.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system.h" />
@@ -217,6 +218,7 @@
     <ClCompile Include="scene07.cpp" />
     <ClCompile Include="scene08.cpp" />
     <ClCompile Include="scene09.cpp" />
+    <ClCompile Include="scene10.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -236,6 +238,8 @@
     <None Include="..\Resources\Shaders\phong.vert" />
     <None Include="..\Resources\Shaders\phong_directional.frag.shader" />
     <None Include="..\Resources\Shaders\phong_spotlight.frag.shader" />
+    <None Include="..\Resources\Shaders\reflection.frag.shader" />
+    <None Include="..\Resources\Shaders\reflection.vert.shader" />
     <None Include="..\Resources\Shaders\texture_phong.frag.shader" />
     <None Include="..\Resources\Shaders\texture_phong.vert.shader" />
     <None Include="..\Resources\Shaders\texture_phong_specular.frag.shader" />
