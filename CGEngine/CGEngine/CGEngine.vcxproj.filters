@@ -256,5 +256,11 @@
     <None Include="..\Resources\Shaders\reflection.vert.shader">
       <Filter>Resource Files\Resource</Filter>
     </None>
+    <None Include="..\Resources\Shaders\tang_texture_phong.frag.shader">
+      <Filter>Resource Files\Resource</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\tang_texture_phong.vert.shader">
+      <Filter>Resource Files\Resource</Filter>
+    </None>
   </ItemGroup>
 </Project>

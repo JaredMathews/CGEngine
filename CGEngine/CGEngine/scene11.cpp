@@ -35,8 +35,8 @@ bool Scene11::Initialize()
 	model->m_transform.m_scale = glm::vec3(1.0f);
 	model->m_transform.m_position = glm::vec3(0.0f, 0.0f, 0.0f);
 
-	model->m_shader.CompileShader("..\\Resources\\Shaders\\texture_phong.vert.shader", GL_VERTEX_SHADER);
-	model->m_shader.CompileShader("..\\Resources\\Shaders\\texture_phong.frag.shader", GL_FRAGMENT_SHADER);
+	model->m_shader.CompileShader("..\\Resources\\Shaders\\tang_texture_phong.vert.shader", GL_VERTEX_SHADER);
+	model->m_shader.CompileShader("..\\Resources\\Shaders\\tang_texture_phong.frag.shader", GL_FRAGMENT_SHADER);
 	model->m_shader.Link();
 	model->m_shader.Use();
 	model->m_shader.PrintActiveAttribs();
@@ -58,10 +58,11 @@ bool Scene11::Initialize()
 	model->m_shader.SetUniform("light.diffuse", light->diffuse);
 	model->m_shader.SetUniform("light.specular", light->specular);
 
-	model->m_mesh.Load("..\\Resources\\ObjFiles\\quad.obj");
+	model->m_mesh.Load("..\\Resources\\ObjFiles\\quad.obj", true);
 	model->m_mesh.BindVertexAttrib(0, Mesh::eVertexType::POSITION);
 	model->m_mesh.BindVertexAttrib(1, Mesh::eVertexType::NORMAL);
 	model->m_mesh.BindVertexAttrib(2, Mesh::eVertexType::TEXCOORD);
+	model->m_mesh.BindVertexAttrib(3, Mesh::eVertexType::TANGENT);
 
 	AddObject(model);
 
@@ -93,10 +94,17 @@ void Scene11::Update()
 
 	float dt = m_engine->Get<Timer>()->FrameTime();
 
-	glm::quat rotation = glm::angleAxis(dt, glm::vec3(0.0f, 0.0f, 1.0f));
+	glm::quat rotation = glm::angleAxis(dt, glm::vec3(0.0f, 1.0f, 0.0f));
 	light->m_transform.m_position = rotation * light->m_transform.m_position;
 	glm::vec4 position = camera->GetView() * glm::vec4(light->m_transform.m_position, 1.0f);
 	model->m_shader.SetUniform("light.position", position);
+
+	auto models = GetObjects<Model>();
+	for (auto model : models)
+	{
+		model->m_shader.Use();
+		model->m_shader.SetUniform("lightPosition", position);
+	}
 
 	auto objects = GetObjects<Object>();
 	for (auto object : objects)

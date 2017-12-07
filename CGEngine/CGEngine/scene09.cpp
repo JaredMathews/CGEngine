@@ -158,11 +158,11 @@ void Scene09::Render()
 	renderable = GetObject<Renderable>("light");
 	renderable->Render();
 
-	std::vector<Renderable*> renderables = GetObjects<Renderable>();
+	/*std::vector<Renderable*> renderables = GetObjects<Renderable>();
 	for (auto renderable : renderables)
 	{
 		renderable->Render();
-	}
+	}*/
 
 	glfwSwapBuffers(m_engine->Get<Renderer>()->m_window);
 }

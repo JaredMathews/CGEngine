@@ -242,6 +242,8 @@
     <None Include="..\Resources\Shaders\phong_spotlight.frag.shader" />
     <None Include="..\Resources\Shaders\reflection.frag.shader" />
     <None Include="..\Resources\Shaders\reflection.vert.shader" />
+    <None Include="..\Resources\Shaders\tang_texture_phong.frag.shader" />
+    <None Include="..\Resources\Shaders\tang_texture_phong.vert.shader" />
     <None Include="..\Resources\Shaders\texture_phong.frag.shader" />
     <None Include="..\Resources\Shaders\texture_phong.vert.shader" />
     <None Include="..\Resources\Shaders\texture_phong_specular.frag.shader" />
