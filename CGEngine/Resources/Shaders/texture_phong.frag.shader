@@ -25,27 +25,43 @@ struct Light
 uniform Light light;
 
 layout(binding=0) uniform sampler2D textureSampler;
+layout(binding = 1) uniform sampler2D normalMap;
 
 layout (location=0) out vec4 outFragmentColor;
 
-void main()
+void phong(vec3 position, vec3 normal, out vec3 ambientDiffuse, out vec3 specular)
 {
 	vec3 positionToLight = normalize(vec3(light.position) - vec3(outFragmentPosition));
 	float diffuseIntensity = max(dot(positionToLight, outFragmentNormal), 0.0);
-	vec4 diffuse = vec4(light.diffuse * material.diffuse * diffuseIntensity, 1.0);
+	vec3 diffuse = light.diffuse * material.diffuse * diffuseIntensity;
 
-	vec4 specular = vec4(0.0);
+	vec3 ambient = material.ambient;
+
+	diffuse = diffuse * light.diffuse;
+	ambient = ambient * light.ambient;
+
+	ambientDiffuse = ambient + diffuse;
+
 	if (diffuseIntensity > 0.0)
 	{
 		vec3 positionToView = normalize(-outFragmentPosition.xyz);
 		vec3 reflectLightVector = reflect(-positionToLight, outFragmentNormal);
 		float specularIntensity = max(dot(reflectLightVector, positionToView), 0.0);
 		specularIntensity = pow(specularIntensity, material.shininess);
-		specular = vec4(light.specular * material.specular * specularIntensity, 1.0);
+		specular = light.specular * material.specular * specularIntensity;
 	}
+}
+
+void main()
+{
+	vec3 ambientDiffuse;
+	vec3 specular;
+
+	vec3 normal = texture(normalMap, outFragmentTexCoord).rgb;
+	normal = normalize(normal * 2.0 - 1.0);
+
+	phong(vec3(outFragmentPosition), normal, ambientDiffuse, specular);
 
     vec4 texColor = texture(textureSampler, outFragmentTexCoord);
-
-	vec4 ambient = vec4(material.ambient, 1.0);
-	outFragmentColor = (texColor * (ambient + diffuse)) + specular;
+	outFragmentColor = texColor * vec4(ambientDiffuse, 1.0) + vec4(specular, 1.0);
 }
