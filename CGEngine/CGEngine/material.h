@@ -19,6 +19,8 @@ public:
 	 bool Material::LoadTextureCube(const std::string& basename, const std::vector<std::string>& suffixes, const std::string& type, GLuint activeTexture);
 	 void SetTextures();
 	 static GLuint CreateTexture(GLuint width, GLuint height);
+	 static GLuint CreateDepthTexture(GLuint width, GLuint height);
+	 static GLuint CreateDepthbuffer(GLuint texture, GLuint width, GLuint height);
 	 void AddTexture(GLuint texture, GLuint activeTexture);
 
 public:
