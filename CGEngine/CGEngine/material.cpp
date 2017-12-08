@@ -50,7 +50,7 @@ bool Material::LoadTexture2D(const std::string & filename, GLuint activeTexture)
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 
-	TextureInfo textureInfo = { activeTexture, texture };
+	TextureInfo textureInfo = { activeTexture, texture, GL_TEXTURE_2D };
 	m_textures.push_back(textureInfo);
 
 	delete data;
@@ -138,7 +138,7 @@ GLuint Material::CreateTexture(GLuint width, GLuint height)
 
 void Material::AddTexture(GLuint texture, GLuint activeTexture)
 {
-	TextureInfo textureInfo = { GL_TEXTURE_2D, activeTexture, texture };
+	TextureInfo textureInfo = { activeTexture, texture, GL_TEXTURE_2D };
 	m_textures.push_back(textureInfo);
 }
 

@@ -18,6 +18,8 @@ Scene12::~Scene12()
 
 bool Scene12::Initialize()
 {
+	GLuint depthTexture = Material::CreateDepthTexture(SHADOW_BUFFER_WIDTH, SHADOW_BUFFER_HEIGHT);
+
 	m_depthShader = new Shader();
 	m_depthShader->CompileShader("..\\Resources\\Shaders\\shadow_depth.vert.shader", GL_VERTEX_SHADER);
 	m_depthShader->CompileShader("..\\Resources\\Shaders\\shadow_depth.frag.shader", GL_FRAGMENT_SHADER);
@@ -32,7 +34,7 @@ bool Scene12::Initialize()
 
 	// light
 	Light* light = new Light("light", this);
-	light->m_transform.m_position = glm::vec3(2.0f, 2.0f, 3.0f);
+	light->m_transform.m_position = glm::vec3(0.0f, 3.0f, 2.0f);
 	light->ambient = glm::vec3(0.2f);
 	light->diffuse = glm::vec3(1.0f, 1.0f, 1.0f);
 	light->specular = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -43,8 +45,8 @@ bool Scene12::Initialize()
 	model->m_transform.m_scale = glm::vec3(1.0f);
 	model->m_transform.m_position = glm::vec3(0.0f, 0.25f, 0.0f);
 
-	model->m_shader.CompileShader("..\\Resources\\Shaders\\phong.vert", GL_VERTEX_SHADER);
-	model->m_shader.CompileShader("..\\Resources\\Shaders\\phong.frag", GL_FRAGMENT_SHADER);
+	model->m_shader.CompileShader("..\\Resources\\Shaders\\shadow_phong.vert.shader", GL_VERTEX_SHADER);
+	model->m_shader.CompileShader("..\\Resources\\Shaders\\shadow_phong.frag.shader", GL_FRAGMENT_SHADER);
 	model->m_shader.Link();
 	model->m_shader.Use();
 	model->m_shader.PrintActiveAttribs();
@@ -69,20 +71,22 @@ bool Scene12::Initialize()
 	model->m_mesh.BindVertexAttrib(1, Mesh::eVertexType::NORMAL);
 	model->m_mesh.BindVertexAttrib(2, Mesh::eVertexType::TEXCOORD);
 
+	model->m_material.AddTexture(depthTexture, GL_TEXTURE1);
+
 	AddObject(model);
 
 	model = new Model("floor", this);
 	model->m_transform.m_scale = glm::vec3(8.0f);
 	model->m_transform.m_position = glm::vec3(0.0f, -1.0f, 0.0f);
 
-	model->m_shader.CompileShader("..\\Resources\\Shaders\\phong.vert", GL_VERTEX_SHADER);
-	model->m_shader.CompileShader("..\\Resources\\Shaders\\phong.frag", GL_FRAGMENT_SHADER);
+	model->m_shader.CompileShader("..\\Resources\\Shaders\\shadow_phong.vert.shader", GL_VERTEX_SHADER);
+	model->m_shader.CompileShader("..\\Resources\\Shaders\\shadow_phong.frag.shader", GL_FRAGMENT_SHADER);
 	model->m_shader.Link();
 	model->m_shader.Use();
 	model->m_shader.PrintActiveAttribs();
 	model->m_shader.PrintActiveUniforms();
 
-	model->m_material.m_ambient = glm::vec3(0.2f, 0.2f, 0.2f);
+	model->m_material.m_ambient = glm::vec3(1.0f, 1.0f, 1.0f);
 	model->m_material.m_diffuse = glm::vec3(0.75f, 0.75f, 0.75f);
 	model->m_material.m_specular = glm::vec3(1.0f, 1.0f, 1.0f);
 	model->m_material.m_shininess = 0.4f * 128.0f;
@@ -100,6 +104,8 @@ bool Scene12::Initialize()
 	model->m_mesh.BindVertexAttrib(0, Mesh::eVertexType::POSITION);
 	model->m_mesh.BindVertexAttrib(1, Mesh::eVertexType::NORMAL);
 	model->m_mesh.BindVertexAttrib(2, Mesh::eVertexType::TEXCOORD);
+
+	model->m_material.AddTexture(depthTexture, GL_TEXTURE1);
 
 	AddObject(model);
 
@@ -132,7 +138,6 @@ bool Scene12::Initialize()
 	model->m_mesh.BindVertexAttrib(0, Mesh::eVertexType::POSITION);
 	model->m_mesh.BindVertexAttrib(1, Mesh::eVertexType::TEXCOORD);
 
-	GLuint depthTexture = Material::CreateDepthTexture(SHADOW_BUFFER_WIDTH, SHADOW_BUFFER_HEIGHT);
 	model->m_material.AddTexture(depthTexture, GL_TEXTURE0);
 
 	AddObject(model);
@@ -166,8 +171,8 @@ void Scene12::Render()
 	glViewport(0, 0, m_engine->Get<Renderer>()->m_width, m_engine->Get<Renderer>()->m_height);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	model = GetObject<Model>("debug");
-	model->Render();
+	//model = GetObject<Model>("debug");
+	//model->Render();
 
 	auto renderables = GetObjects<Renderable>();
 	for (auto renderable : renderables)
@@ -200,12 +205,23 @@ void Scene12::Update()
 
 	glm::vec4 lightPosition = camera->GetView() * glm::vec4(light->m_transform.m_position, 1.0f);
 
+	glm::mat4 mxBias(
+		0.5f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.5f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.5f, 0.0f,
+		0.5f, 0.5f, 0.5f, 1.0f
+	);
+
 	auto models = GetObjects<Model>();
 	for (auto model : models)
 	{
 		model->m_shader.Use();
 		model->m_shader.SetUniform("light.position", lightPosition);
+		glm::mat4 mxModel = model->m_transform.GetMatrix44();
+		glm::mat4 mxBVP = mxBias * mxVP * mxModel;
+		model->m_shader.SetUniform("mxMLP", mxBVP);
 	}
+
 
 	auto objects = GetObjects<Object>();
 	for (auto object : objects)

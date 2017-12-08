@@ -280,5 +280,11 @@
     <None Include="..\Resources\Shaders\shadow_depth_debug.vert.shader">
       <Filter>Resource Files\Resource</Filter>
     </None>
+    <None Include="..\Resources\Shaders\shadow_phong.frag.shader">
+      <Filter>Resource Files\Resource</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\shadow_phong.vert.shader">
+      <Filter>Resource Files\Resource</Filter>
+    </None>
   </ItemGroup>
 </Project>

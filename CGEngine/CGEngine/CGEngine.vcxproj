@@ -248,6 +248,8 @@
     <None Include="..\Resources\Shaders\shadow_depth.vert.shader" />
     <None Include="..\Resources\Shaders\shadow_depth_debug.frag.shader" />
     <None Include="..\Resources\Shaders\shadow_depth_debug.vert.shader" />
+    <None Include="..\Resources\Shaders\shadow_phong.frag.shader" />
+    <None Include="..\Resources\Shaders\shadow_phong.vert.shader" />
     <None Include="..\Resources\Shaders\tang_texture_phong.frag.shader" />
     <None Include="..\Resources\Shaders\tang_texture_phong.vert.shader" />
     <None Include="..\Resources\Shaders\texture_phong.frag.shader" />
