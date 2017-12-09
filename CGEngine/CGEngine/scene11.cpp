@@ -46,8 +46,8 @@ bool Scene11::Initialize()
 	model->m_material.m_diffuse = glm::vec3(0.75f, 0.75f, 0.75f);
 	model->m_material.m_specular = glm::vec3(1.0f, 1.0f, 1.0f);
 	model->m_material.m_shininess = 0.4f * 128.0f;
-	model->m_material.LoadTexture2D("..\\Resources\\Textures\\rocks.jpg", GL_TEXTURE0);
-	model->m_material.LoadTexture2D("..\\Resources\\Textures\\rocks_normal.jpg", GL_TEXTURE1);
+	model->m_material.LoadTexture2D("..\\Resources\\Textures\\brick.png", GL_TEXTURE0);
+	model->m_material.LoadTexture2D("..\\Resources\\Textures\\brick_normal.png", GL_TEXTURE1);
 
 	model->m_shader.SetUniform("material.ambient", model->m_material.m_ambient);
 	model->m_shader.SetUniform("material.diffuse", model->m_material.m_diffuse);
@@ -58,7 +58,7 @@ bool Scene11::Initialize()
 	model->m_shader.SetUniform("light.diffuse", light->diffuse);
 	model->m_shader.SetUniform("light.specular", light->specular);
 
-	model->m_mesh.Load("..\\Resources\\ObjFiles\\quad.obj", true);
+	model->m_mesh.Load("..\\Resources\\ObjFiles\\sphere.obj", true);
 	model->m_mesh.BindVertexAttrib(0, Mesh::eVertexType::POSITION);
 	model->m_mesh.BindVertexAttrib(1, Mesh::eVertexType::NORMAL);
 	model->m_mesh.BindVertexAttrib(2, Mesh::eVertexType::TEXCOORD);
